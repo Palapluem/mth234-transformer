@@ -1,0 +1,67 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{thai}
+\setotherlanguage{english}
+
+\setmainfont{Sarabun}[
+    Script=Thai,
+    Language=Default
+]
+
+% English font - using Times which is available on macOS
+% If you want a different font, you can change this or comment it out
+\newfontfamily\englishfont{Times}[
+    Ligatures=TeX
+]
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+% Author names - edit these directly
+\newcommand{\authornameone}{Author 1}
+\newcommand{\authornametwo}{Author 2}
+\newcommand{\authornamethree}{Author 3}
+\newcommand{\authornamefour}{Author 4}
+\newcommand{\authornamefive}{Author 5}
+
+\title{Transformer: Linear Algebra that understand human language}
+\author{%
+    \authornameone \\
+    \authornametwo \\
+    \authornamethree \\
+    \authornamefour \\
+    \authornamefive
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+นี่คือเอกสารตัวอย่างที่รองรับภาษาไทยและภาษาอังกฤษ
+This is a sample document that supports both Thai and English.
+\end{abstract}
+
+\section{บทนำ}
+
+นี่คือส่วนของบทนำที่เขียนด้วยภาษาไทย
+
+\section{Introduction}
+
+This is an introduction section in English.
+
+\section{ตัวอย่างการเขียนสมการ}
+
+ตัวอย่างสมการทางคณิตศาสตร์:
+
+\begin{equation}
+    \mathbf{y} = \text{Transformer}(\mathbf{x})
+\end{equation}
+
+\end{document}
