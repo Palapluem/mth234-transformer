@@ -1,0 +1,418 @@
+\section{ความรู้พื้นฐานทางคณิตศาสตร์ที่เกี่ยวข้อง (Mathematical Concepts from Linear Algebra)}
+
+\subsection{เวกเตอร์ (Vector)}
+
+เวกเตอร์เป็นปริมาณทางคณิตศาสตร์และฟิสิกส์ ประกอบไปด้วย ขนาด และ ทิศทาง โดยสามารถดำเนินการทางคณิตศาสตร์ได้บนปริภูมิเวกเตอร์ ต่างจากปริมาณทางสเกลาร์ (Scalar) ที่อธิบายปริมาณเพียงขนาดอย่างเดียว
+
+ตัวอย่าง: เวกเตอร์ใน 3 มิติ
+\[
+\mathbf{v} = [2, 3, 1] \quad \text{หรือเขียนในรูป} \quad \mathbf{v} = 2\mathbf{i} + 3\mathbf{j} + 1\mathbf{k}
+\]
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item การแทนค่าข้อมูลในรูปเวกเตอร์ (Vectors) สำหรับโทเคนคำ (Word Embeddings) เช่น คำว่า "cat" อาจถูกแทนด้วยเวกเตอร์ขนาด 512 มิติ
+
+    \item การดำเนินการเวกเตอร์ เช่น การบวก การคูณด้วยสเกลาร์ และการคำนวณผลคูณจุด
+
+    \item Positional Encoding: การเพิ่มเวกเตอร์ตำแหน่งเข้ากับ word embeddings เพื่อให้โมเดลรู้ลำดับของคำ
+\end{itemize}
+
+\subsection{เมทริกซ์ (Matrices)}
+
+เป็นกลุ่มของจำนวนหรือสมาชิกของริงใดๆ เขียนเรียงกันเป็นรูปสี่เหลี่ยมผืนผ้าหรือจัตุรัส กล่าวคือเรียงเป็นแถวในแนวนอน และเรียงเป็นคอลัมน์ในแนวตั้ง เรามักเขียนเมทริกซ์เป็นตารางที่ไม่มีเส้นแบ่งและเขียนวงเล็บคร่อมตารางไว้
+
+ตัวอย่าง: เมทริกซ์ $A$ ขนาด $3 \times 2$
+\[
+A = \begin{bmatrix}
+1 & 2 \\
+3 & 4 \\
+5 & 6
+\end{bmatrix}
+\]
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item การแทนค่าชุดข้อมูล: ในกรณีเมื่อมีหลายเวกเตอร์ (หลายคำในประโยค) สามารถจัดเก็บเป็นเมทริกซ์ได้ เช่น ประโยค $10$ คำ $\times 512$ มิติ $=$ เมทริกซ์ $10 \times 512$
+
+    \item Weight Matrices: เมทริกซ์น้ำหนัก $W_Q$, $W_K$, $W_V$ ที่ใช้ในการแปลงเชิงเส้น
+
+    \item เทนเซอร์ (Tensors) ในฐานะเมทริกซ์ทั่วไป (Generalized Matrix) และความสำคัญในการจัดการข้อมูลหลายมิติในโครงข่ายประสาทเทียม
+\end{itemize}
+
+\subsection{ผลคูณจุด (Dot Product)}
+
+เป็นการดำเนินการระหว่างเวกเตอร์สองตัวที่ให้ผลลัพธ์เป็นสเกลาร์ (ตัวเลข) โดยคำนวณจากผลรวมของผลคูณของสมาชิกที่อยู่ในตำแหน่งเดียวกัน
+
+สูตร: สำหรับเวกเตอร์ $\mathbf{a} = [a_1, a_2, \ldots, a_n]$ และ $\mathbf{b} = [b_1, b_2, \ldots, b_n]$%
+\[
+\mathbf{a} \cdot \mathbf{b} = a_1 b_1 + a_2 b_2 + \cdots + a_n b_n = \sum_{i=1}^{n} a_i b_i
+\]
+
+ตัวอย่าง:
+\[
+\mathbf{a} = [1, 2, 3], \quad \mathbf{b} = [4, 5, 6]
+\]
+\[
+\mathbf{a} \cdot \mathbf{b} = (1 \times 4) + (2 \times 5) + (3 \times 6) = 4 + 10 + 18 = 32
+\]
+
+ความสัมพันธ์กับมุม: $\mathbf{a} \cdot \mathbf{b} = \|\mathbf{a}\| \|\mathbf{b}\| \cos(\theta)$ โดย $\theta$ คือมุมระหว่างเวกเตอร์
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item การวัดความคล้ายคลึง (Similarity): ใช้ผลคูณจุดในการประเมินความสอดคล้องหรือความคล้ายคลึงระหว่างเวกเตอร์ Query และ Key
+
+    \item Cosine Similarity: $\cos(\theta) = \frac{\mathbf{a} \cdot \mathbf{b}}{\|\mathbf{a}\| \|\mathbf{b}\|}$ เป็นกลไกสำคัญในการหาความสัมพันธ์ระหว่างโทเคน
+
+    \item Scaled Dot-Product Attention: $\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$
+
+    \item Geometric Interpretation: ผลคูณจุดวัด projection ของเวกเตอร์หนึ่งไปยังอีกเวกเตอร์หนึ่ง
+
+    \item Computational Complexity: $O(n^2 d)$ สำหรับ sequence length $n$ และ dimension $d$
+\end{itemize}
+
+\subsection{การแปลงเชิงเส้น (Linear Transformation)}
+
+เป็นฟังก์ชันระหว่างปริภูมิเวกเตอร์สองปริภูมิที่รักษาการดำเนินการบวกเวกเตอร์และการคูณสเกลาร์ ในทางปฏิบัติ การแปลงเชิงเส้นสามารถแทนด้วยการคูณเมทริกซ์
+
+สูตร: $T(\mathbf{x}) = A\mathbf{x}$ โดย $A$ เป็นเมทริกซ์การแปลง
+
+ตัวอย่าง: การหมุนเวกเตอร์ 2 มิติ 90 องศา
+\[
+A = \begin{bmatrix}
+0 & -1 \\
+1 & 0
+\end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix}
+1 \\
+0
+\end{bmatrix}, \quad A\mathbf{x} = \begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\]
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item Matrix Multiplication: ใช้การคูณเมทริกซ์เพื่อแปลงเชิงเส้นเวกเตอร์อินพุต $X$ ไปสู่เมทริกซ์ Query ($Q$), Key ($K$), และ Value ($V$): $Q = XW_Q$, $K = XW_K$, $V = XW_V$
+
+    \item Projections: การฉายภาพช่วยในการสร้างพื้นที่เวกเตอร์ย่อย (Subspaces) เพื่อจับความสัมพันธ์ทางความหมายที่ชัดเจนยิ่งขึ้น
+
+    \item Parameter Count: จำนวน parameters ในเมทริกซ์ $W_Q$, $W_K$, $W_V$ คือ $3 \times (d_{\text{model}} \times d_k)$ สำหรับแต่ละ head
+
+    \item Multi-Head Attention Formula: $\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_n)W^O$ โดยที่ $\text{head}_i = \text{Attention}(QW^Q_i, KW^K_i, VW^V_i)$
+
+    \item Dimensionality: การรักษามิติข้อมูลผ่านการ concatenate และ linear projection
+\end{itemize}
+
+\subsection{ฟังก์ชัน Softmax และการกระจายความน่าจะเป็น (Softmax and Probability Distribution)}
+
+ฟังก์ชัน Softmax เป็นฟังก์ชันที่แปลงเวกเตอร์ของตัวเลขจริงให้เป็นเวกเตอร์ของความน่าจะเป็นที่รวมกันมีค่าเป็น $1$ โดยค่าที่มากกว่าจะได้ความน่าจะเป็นที่สูงกว่า
+
+สูตร: สำหรับเวกเตอร์ $\mathbf{x} = [x_1, x_2, \ldots, x_n]$
+\[
+\text{softmax}(x_i) = \frac{\exp(x_i)}{\sum_{j=1}^{n} \exp(x_j)}
+\]
+
+ตัวอย่าง: $\mathbf{x} = [2, 1, 0]$, $\exp(\mathbf{x}) = [7.39, 2.72, 1.00]$, $\sum \exp(\mathbf{x}) = 11.11$
+\[
+\text{softmax}(\mathbf{x}) = [0.665, 0.245, 0.090] \quad \text{(รวมเป็น 1.000)}
+\]
+
+Properties:
+
+\begin{itemize}
+    \item Output $\in [0,1]$ และ $\sum(\text{output}) = 1$
+
+    \item Differentiable ทำให้สามารถ backpropagate ได้
+
+    \item เน้นค่าที่สูงและลดค่าที่ต่ำ
+\end{itemize}
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item Attention Weights: การแปลงคะแนนความสนใจ (Attention Scores) ให้เป็นความน่าจะเป็น (Attention Weights) ที่รวมกันเท่ากับหนึ่ง
+
+    \item Scaled Attention: การปรับขนาด (Scaling) ด้วย $\sqrt{d_k}$ เพื่อรักษาความเสถียรของเกรเดียนต์ (Gradient Stability)
+
+    \item Numerical Stability: เมื่อ $d_k$ ใหญ่ขึ้น ค่า variance ของผลคูณจุดจะเป็น $d_k$ ทำให้ softmax เข้าสู่ภาวะ saturated gradients การหารด้วย $\sqrt{d_k}$ จึงช่วยแก้ปัญหานี้
+
+    \item Temperature Scaling: การปรับ "ความคม" ของ probability distribution โดยหารด้วยค่า temperature $T$: $\text{softmax}(\mathbf{x}/T)$
+\end{itemize}
+
+\subsection{บรรทัดฐาน (Norms) และการปรับให้เป็นมาตรฐาน (Normalization)}
+
+บรรทัดฐานเป็นฟังก์ชันที่กำหนดขนาดหรือความยาวของเวกเตอร์ ใช้ในการวัดระยะทางและการปรับมาตรฐานเวกเตอร์
+
+ประเภทของ Norms:
+
+L2 Norm (Euclidean Norm): $\|\mathbf{v}\|_2 = \sqrt{v_1^2 + v_2^2 + \cdots + v_n^2}$
+
+ตัวอย่าง: $\mathbf{v} = [3, 4] \rightarrow \|\mathbf{v}\|_2 = \sqrt{3^2 + 4^2} = \sqrt{25} = 5$
+
+L1 Norm (Manhattan Norm): $\|\mathbf{v}\|_1 = |v_1| + |v_2| + \cdots + |v_n|$
+
+ตัวอย่าง: $\mathbf{v} = [3, 4] \rightarrow \|\mathbf{v}\|_1 = |3| + |4| = 7$
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item Vector Normalization: การทำให้เวกเตอร์มีความยาวเป็น $1$ โดยหารด้วย L2 norm: $\mathbf{v}_{\text{norm}} = \mathbf{v}/\|\mathbf{v}\|_2$
+
+    \item Layer Normalization: การปรับค่าเฉลี่ย และ ความแปรปรวนของเวกเตอร์ในแต่ละชั้น $\text{LayerNorm}(\mathbf{x}) = \gamma \cdot \frac{\mathbf{x} - \mu}{\sigma} + \beta$ โดย $\mu$ คือค่าเฉลี่ย, $\sigma$ คือส่วนเบี่ยงเบนมาตรฐาน, $\gamma$ และ $\beta$ เป็น learnable parameters
+
+    \item Distance Metrics:
+    \begin{itemize}
+        \item Euclidean Distance: $\|\mathbf{a} - \mathbf{b}\|_2$ ในการวัดความแตกต่างระหว่าง embeddings
+
+        \item Cosine Distance: $1 - \cos(\theta)$ ไม่ขึ้นกับขนาดของเวกเตอร์
+    \end{itemize}
+
+    \item Gradient Clipping: การจำกัดขนาดของ gradient เพื่อป้องกัน exploding gradients
+\end{itemize}
+
+\subsection{ค่าเฉพาะและเวกเตอร์เฉพาะ (Eigenvalues and Eigenvectors)}
+
+สำหรับเมทริกซ์จัตุรัส $A$ ขนาด $n \times n$ หาก $A\mathbf{v} = \lambda\mathbf{v}$ โดย $\mathbf{v} \neq \mathbf{0}$ แล้ว $\lambda$ เรียกว่าค่าเฉพาะ (eigenvalue) และ $\mathbf{v}$ เรียกว่าเวกเตอร์เฉพาะ (eigenvector)
+
+ความหมาย: เวกเตอร์เฉพาะคือเวกเตอร์ที่เมื่อถูกแปลงด้วยเมทริกซ์ $A$ แล้วทิศทางจะไม่เปลี่ยน มีแต่ขนาดที่เปลี่ยนไปตามค่าเฉพาะ $\lambda$
+
+ตัวอย่าง:
+\[
+A = \begin{bmatrix}
+2 & 0 \\
+0 & 3
+\end{bmatrix}, \quad \mathbf{v} = \begin{bmatrix}
+1 \\
+0
+\end{bmatrix}, \quad A\mathbf{v} = \begin{bmatrix}
+2 \\
+0
+\end{bmatrix} = 2\mathbf{v}
+\]
+
+ดังนั้น $\lambda = 2$ และ $\mathbf{v} = [1, 0]$ เป็นคู่ eigenvalue-eigenvector
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item Principal Directions: การวิเคราะห์เมทริกซ์น้ำหนัก (Weight Matrices) เพื่อเข้าใจทิศทางหลักของการแปลงข้อมูล
+
+    \item Singular Value Decomposition (SVD): $A = U\Sigma V^T$ ใช้ในการลดมิติของข้อมูล (Dimensionality Reduction) และการ pre-training
+
+    \item Attention Pattern Analysis: การวิเคราะห์ว่าโมเดลให้ความสนใจกับส่วนใดของข้อมูล
+
+    \item Spectral Analysis: การศึกษาค่า eigenvalues ของเมทริกซ์ attention เพื่อเข้าใจโครงสร้างของความสัมพันธ์
+
+    \item Model Compression: ใช้ low-rank approximations ในการลดขนาดโมเดล
+\end{itemize}
+
+\subsection{แรงค์ของเมทริกซ์ (Matrix Rank) และความเป็นอิสระเชิงเส้น (Linear Independence)}
+
+แรงค์ของเมทริกซ์ คือจำนวนแถว (หรือคอลัมน์) ที่เป็นอิสระเชิงเส้นสูงสุดในเมทริกซ์นั้น
+
+ความเป็นอิสระเชิงเส้น: เวกเตอร์ $\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_n$ เป็นอิสระเชิงเส้นถ้าไม่มีเวกเตอร์ใดที่สามารถเขียนเป็นผลรวมเชิงเส้นของเวกเตอร์อื่นๆ ได้
+
+ตัวอย่าง:
+\[
+A = \begin{bmatrix}
+1 & 2 & 3 \\
+0 & 1 & 2 \\
+1 & 4 & 7
+\end{bmatrix}, \quad \text{rank}(A) = 2 \quad \text{เพราะแถวที่ 3} = 2 \times \text{(แถวที่ 2)} - \text{(แถวที่ 1)}
+\]
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item Expressive Power: Rank ของเมทริกซ์ Query, Key, Value มีผลต่อความสามารถในการแสดงออก (expressive power) ของโมเดล
+
+    \item Embedding Quality: ความเป็นอิสระเชิงเส้นของเวกเตอร์ embeddings ช่วยให้โมเดลแยกความหมายที่แตกต่างกันได้ชัดเจน
+
+    \item Low-Rank Approximations: ใช้ในการลดขนาดโมเดลและเพิ่มประสิทธิภาพ เช่น LoRA (Low-Rank Adaptation)
+
+    \item Rank Deficiency: เมื่อเมทริกซ์มี rank ต่ำกว่าที่ควรจะเป็น อาจส่งผลต่อความสามารถในการเรียนรู้ของโมเดล
+
+    \item Information Bottleneck: การออกแบบ architecture ให้มี rank ที่เหมาะสมเพื่อควบคุมการไหลของข้อมูล
+\end{itemize}
+
+\subsection{การแยกตัวประกอบเมทริกซ์ (Matrix Decomposition)}
+
+เป็นการเขียนเมทริกซ์ในรูปของผลคูณของเมทริกซ์ที่เรียบง่ายกว่า มีประโยชน์ในการคำนวณและวิเคราะห์
+
+\subsubsection{Singular Value Decomposition (SVD)}
+
+สูตร: $A = U\Sigma V^T$ โดย
+
+\begin{itemize}
+    \item $U$: เมทริกซ์ orthogonal ($U^T U = I$) ขนาด $m \times m$
+
+    \item $\Sigma$: เมทริกซ์ diagonal ของ singular values ($\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r > 0$)
+
+    \item $V^T$: เมทริกซ์ orthogonal ($V^T V = I$) ขนาด $n \times n$
+\end{itemize}
+
+ตัวอย่าง:
+\[
+A = \begin{bmatrix}
+3 & 2 & 2 \\
+2 & 3 & -2
+\end{bmatrix}
+\]
+
+สามารถแยกเป็น $A = U\Sigma V^T$ ซึ่งช่วยในการหา rank, pseudo-inverse, และ approximation
+
+การใช้งาน:
+
+\begin{itemize}
+    \item การวิเคราะห์และบีบอัดโมเดล
+
+    \item การหา low-rank approximations: $A_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i^T$ (ใช้เฉพาะ $k$ singular values ที่ใหญ่ที่สุด)
+
+    \item Pre-training และ initialization
+\end{itemize}
+
+\subsubsection{QR Decomposition}
+
+สูตร: $A = QR$ โดย
+
+\begin{itemize}
+    \item $Q$: เมทริกซ์ orthogonal
+
+    \item $R$: เมทริกซ์ upper triangular
+\end{itemize}
+
+การใช้งาน:
+
+\begin{itemize}
+    \item แก้ระบบสมการเชิงเส้น
+
+    \item หา eigenvalues
+
+    \item orthogonalization
+\end{itemize}
+
+\subsubsection{LU Decomposition}
+
+สูตร: $A = LU$ โดย
+
+\begin{itemize}
+    \item $L$: เมทริกซ์ lower triangular
+
+    \item $U$: เมทริกซ์ upper triangular
+\end{itemize}
+
+การใช้งาน:
+
+\begin{itemize}
+    \item แก้ระบบสมการเชิงเส้นอย่างมีประสิทธิภาพ
+\end{itemize}
+
+\subsection{ความตั้งฉาก (Orthogonality) และเวกเตอร์พื้นฐาน (Basis Vectors)}
+
+เวกเตอร์ตั้งฉาก หมายถึงเวกเตอร์สองตัวที่เมื่อนำมาต่อกันแล้วมีมุม $\theta$ เป็น $90^\circ$ และเมื่อนำมาหาผลคูณจุด (Dot-Product) จะมีค่าเป็น $0$ ($\mathbf{u} \cdot \mathbf{v} = 0$)
+
+Orthonormal Basis: ชุดของเวกเตอร์ $\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_n\}$ ที่
+
+\begin{itemize}
+    \item ตั้งฉากกัน: $\mathbf{v}_i \cdot \mathbf{v}_j = 0$ เมื่อ $i \neq j$
+
+    \item มีความยาวเป็น $1$: $\|\mathbf{v}_i\| = 1$
+\end{itemize}
+
+ตัวอย่าง: Standard basis ใน $\mathbb{R}^3$
+\[
+\mathbf{e}_1 = [1, 0, 0], \quad \mathbf{e}_2 = [0, 1, 0], \quad \mathbf{e}_3 = [0, 0, 1]
+\]
+
+Orthogonal Matrices: เมทริกซ์ $W$ ที่ $W^T W = I$
+
+Properties:
+
+\begin{itemize}
+    \item รักษาความยาวเวกเตอร์: $\|W\mathbf{x}\| = \|\mathbf{x}\|$
+
+    \item รักษามุมระหว่างเวกเตอร์
+
+    \item $\det(W) = \pm 1$
+\end{itemize}
+
+การใช้งานใน Transformer:
+
+\begin{itemize}
+    \item Weight Initialization: ใช้ orthogonal matrices ในการ initialize weights เพื่อป้องกัน vanishing/exploding gradients
+
+    \item Basis Transformations: การเปลี่ยนฐานของ vector space ในการสร้าง different representations
+
+    \item Gram-Schmidt Process: วิธีการสร้าง orthogonal basis จากชุดเวกเตอร์ที่ไม่ตั้งฉาก
+
+    \item Stability: การรักษา inner products และ angles ระหว่างเวกเตอร์ช่วยให้การเทรนเสถียร
+\end{itemize}
+
+\subsection{กฎลูกโซ่ (Chain Rule) และการแพร่กระจายย้อนกลับ (Backpropagation)}
+
+กฎลูกโซ่ เป็นกฎของแคลคูลัส (Calculus) สำหรับการหาอนุพันธ์ของฟังก์ชันประกอบ
+
+สูตร: ถ้า $y = f(g(x))$ แล้ว $\frac{dy}{dx} = \frac{dy}{dg} \cdot \frac{dg}{dx}$
+
+ตัวอย่าง:
+\[
+y = (3x + 1)^2
+\]
+
+กำหนด $u = 3x + 1$, $y = u^2$
+\[
+\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx} = 2u \cdot 3 = 6(3x + 1)
+\]
+
+การใช้งานใน Transformer:
+
+Jacobian Matrices: เมทริกซ์ของ partial derivatives สำหรับฟังก์ชันเวกเตอร์
+\[
+J = \left[\frac{\partial f_i}{\partial x_j}\right] \quad \text{สำหรับ } i=1,\ldots,m \text{ และ } j=1,\ldots,n
+\]
+
+ตัวอย่าง: สำหรับ $f(x,y) = [x^2+y, xy]$
+\[
+J = \begin{bmatrix}
+2x & 1 \\
+y & x
+\end{bmatrix}
+\]
+
+Backpropagation: อัลกอริทึมสำหรับคำนวณ gradients ในโครงข่ายประสาทเทียม
+
+ขั้นตอน:
+
+\begin{itemize}
+    \item Forward Pass: คำนวณ output จาก input
+
+    \item Compute Loss: คำนวณค่า loss $L$
+
+    \item Backward Pass: คำนวณ $\frac{\partial L}{\partial W}$ สำหรับทุก weights $W$
+\end{itemize}
+
+สูตรสำคัญ: $\frac{\partial L}{\partial W} = \frac{\partial L}{\partial Y} \cdot \frac{\partial Y}{\partial W}$
+
+ตัวอย่างในชั้น Linear:
+\[
+Y = WX + b
+\]
+\[
+\frac{\partial L}{\partial W} = \frac{\partial L}{\partial Y} \cdot X^T, \quad \frac{\partial L}{\partial X} = W^T \cdot \frac{\partial L}{\partial Y}
+\]
+
+Computational Graph: การแทนโครงสร้างของ neural network เป็นกราฟแบบมีทิศทาง (Directed Acyclic Graph) เพื่อคำนวณ derivatives อย่างเป็นระบบ
+
+ตัวอย่าง:
+\[
+\text{Input} \rightarrow \text{Linear} \rightarrow \text{ReLU} \rightarrow \text{Linear} \rightarrow \text{Softmax} \rightarrow \text{Loss}
+\]
+\[
+x \rightarrow Wx+b \rightarrow \max(0,\cdot) \rightarrow Wy+c \rightarrow \text{softmax} \rightarrow L
+\]
