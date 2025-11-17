@@ -100,22 +100,29 @@
 \emergencystretch=3em
 \hbadness=1000
 
-% Author names - edit these directly
-\newcommand{\authornameone}{Author 1}
-\newcommand{\authornametwo}{Author 2}
-\newcommand{\authornamethree}{Author 3}
-\newcommand{\authornamefour}{Author 4}
-\newcommand{\authornamefive}{Author 5}
+% Author names and codes - edit these directly
+\newcommand{\authornameone}{Full Name One}
+\newcommand{\authorcodeone}{UNI001}
+\newcommand{\authornametwo}{Full Name Two}
+\newcommand{\authorcodetwo}{UNI002}
+\newcommand{\authornamethree}{Full Name Three}
+\newcommand{\authorcodethree}{UNI003}
+\newcommand{\authornamefour}{Full Name Four}
+\newcommand{\authorcodefour}{UNI004}
+\newcommand{\authornamefive}{Full Name Five}
+\newcommand{\authorcodefive}{UNI005}
 
 \title{Transformer: พีชคณิตเชิงเส้นที่เข้าใจภาษามนุษย์}
 \author{%
-    \authornameone \\
-    \authornametwo \\
-    \authornamethree \\
-    \authornamefour \\
-    \authornamefive
+    \begin{tabular}{@{}ll@{}}
+        \textbf{\authornameone} & \textbf{\authorcodeone} \\
+        \textbf{\authornametwo} & \textbf{\authorcodetwo} \\
+        \textbf{\authornamethree} & \textbf{\authorcodethree} \\
+        \textbf{\authornamefour} & \textbf{\authorcodefour} \\
+        \textbf{\authornamefive} & \textbf{\authorcodefive}
+    \end{tabular}
 }
-\date{\today}
+\date{}
 
 \begin{document}
 
